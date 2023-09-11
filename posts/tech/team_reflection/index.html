@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>team_todo项目复盘 | Klutz&#39;s Blog</title>
+<meta name="keywords" content="go, mysql">
+<meta name="description" content="teamtodo项目复盘与学习">
+<meta name="author" content="Klutz">
+<link rel="canonical" href="https://711lll711.github.io/posts/tech/team_reflection/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.css" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.js" onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://711lll711.github.io/img/avatar.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://711lll711.github.io/img/avatar.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="https://711lll711.github.io/img/avatar.ico">
+<link rel="apple-touch-icon" href="https://711lll711.github.io/img/avatar.ico">
+<link rel="mask-icon" href="https://711lll711.github.io/img/avatar.ico">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js"></script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = ""; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<meta property="og:title" content="team_todo项目复盘" />
+<meta property="og:description" content="teamtodo项目复盘与学习" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://711lll711.github.io/posts/tech/team_reflection/" />
+<meta property="og:image" content="https://711lll711.github.io/posts/tech/team_reflection/go.jpg" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-09-10T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-09-10T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://711lll711.github.io/posts/tech/team_reflection/go.jpg" />
+<meta name="twitter:title" content="team_todo项目复盘"/>
+<meta name="twitter:description" content="teamtodo项目复盘与学习"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+
+        {
+          "@type": "ListItem",
+          "position":  1 ,
+          "name": "📚文章",
+          "item": "https://711lll711.github.io/posts/"
+        },
+
+        {
+          "@type": "ListItem",
+          "position":  2 ,
+          "name": "👨🏻‍💻 技术",
+          "item": "https://711lll711.github.io/posts/tech/"
+        }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "team_todo项目复盘",
+      "item": "https://711lll711.github.io/posts/tech/team_reflection/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "team_todo项目复盘",
+  "name": "team_todo项目复盘",
+  "description": "teamtodo项目复盘与学习",
+  "keywords": [
+    "go", "mysql"
+  ],
+  "articleBody": "响应的格式、数据类型设计 响应的数据全部存在data字段中，可以设置makereponse函数生成响应 设计合适的结构体 数据库进阶操作 外键、主键、联合主键\n主键：唯一标识某一行 联合主键：多个列的值联合标识某一行\n外键：将一个表的列与另一个表的列相关联，一个表中的外键值必须在另一个表中存在。用于实现一对多和多对多的查询 CREATE TABLE Orders ( OrderID INT PRIMARY KEY, CustomerID INT, FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID) ); //连接多个表查询 //根据 order找出customer的country var country Country if err := global.GVA_DB. Joins(\"JOIN customers ON orders.customer_id = customers.id\"). Joins(\"JOIN countries ON customers.country_id = countries.id\"). Where(\"orders.id = ?\", 1). Select(\"countries.name\"). First(\u0026country).Error; err != nil { // 处理查询错误 } else { // 使用 country 数据 } //joins语法 db.Joins(\"JOIN table_name ON condition\") //condition是SQL的条件语句 使用gorm创建、查询、更新、删除\n如果涉及多个表同时查询写入，采用事务，方便回滚\n预加载，它在一次查询中获取了关联的数据，而不是为每个主对象执行额外的查询。 // 开始事务 tx := db.Begin() // 执行事务操作 if err := tx.Create(\u0026User{Name: \"Alice\"}).Error; err != nil { // 发生错误，回滚事务 tx.Rollback() // 处理事务错误 } else { // 事务操作成功，提交事务 tx.Commit() } 自动迁移表格automigrate\n用于确保数据库中的表格结构与应用程序中的数据模型一致。 好用的库 copier copier.Copy(\u0026employee, \u0026user) 就是将user对象中的字段赋值到employee的同名字段中。如果目标对象中没有同名的字段，则该字段被忽略。\n比如创建群组功能，不需要单个字段赋值给group结构，只需要用copier把groupreq的字段传递给group即可\nzap 日志库\n从标准日志库log到zap 创建 Logger实例 使用 Zap 创建一个 Logger 实例，Logger 用于记录日志消息。通常你会在应用程序的初始化代码中创建 Logger。\nlogger, err := zap.NewProduction()// NewProduction() 和 NewDevelopment() NewExample() 三种模式 if err != nil { // 处理错误 } defer logger.Sync() // 在程序退出时释放资源 日志配置\nzap.NewDevelopmentConfig() 是 Zap 日志库提供的一个函数，用于创建一个适用于开发和调试环境的日志配置。\nLevel: 默认设置为 Debug，允许记录所有日志级别，包括 Info、Debug、Warn、Error、 DPanic 和 Panic。\nEncoding: 默认使用 JSON 编码格式，以便日志可以轻松地被其他工具解析。\nOutput Paths: 默认将日志输出到标准错误流（stderr），这在开发环境中通常是合适的。\nError Output Paths: 默认将错误级别的日志（Error、DPanic 和 Panic）也输出到标准错误流。\nEncoder Config: 编码器配置允许对 JSON 编码进行一些自定义设置，如时间格式。\n日志级别 Info(), Debug(), Warn(), Error(), Fatal()…\n结构化日志\nlogger.Info(\"User login\", zap.String(\"username\", \"john_doe\"), zap.Int(\"status_code\", 200)) 设置全局字段 logger = logger.With(zap.String(\"app_name\", \"MyApp\")) 设置日志输出的位置 // 创建一个输出到文件的 WriteSyncer fileWriter := zapcore.AddSync(file) // 创建一个 core fileCore := zapcore.NewCore( zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig()), // 或者使用其他编码器 fileWriter, zap.DebugLevel, // 设置日志级别 ) // 创建 Logger logger := zap.New(fileCore, zap.AddCaller()) defer logger.Sync() mapstructure将map映射到结构体，viper解析配置文件\n–无需自己写解析函数 # config.yaml Mysql: host: \"localhost\" port: \"3306\" user: \"用户名\" password: \"数据库密码\" charset: \"utf8\" database: \"TeamToDo\" type MySQLConfig struct { Host string `mapstructure:\"host\"` Port string `mapstructure:\"port\"` User string `mapstructure:\"user\"` Password string `mapstructure:\"password\"` Charset string `mapstructure:\"charset\"` Database string `mapstructure:\"database\"` } // 从文件加载配置 viper.SetConfigFile(\"config.yaml\")//设置配置文件 err := viper.ReadInConfig() if err != nil { log.Fatalf(\"读取配置文件失败: %v\", err) } // 初始化一个空的 Config 结构体 var config Config // 使用 mapstructure 将配置文件加载到结构体中 err = viper.Unmarshal(\u0026config, viper.DecoderConfigOption(mapstructure.NewDecoderConfigOption()))//解码器 if err != nil { log.Fatalf(\"解析配置文件失败: %v\", err) } // 打印配置信息 fmt.Printf(\"Mysql Host: %s\\n\", config.Mysql.Host) rand生成随机数 rand.New(rand.NewSource(time.Now().UnixNano())).Intn(1000000) rand.New()//创建随机数生成器 rand.NewSource()//创建随机数种子 Intn()//随机数范围 jwt使用 创建jwt //创建claims claims := jwt.MapClaims{ \"userID\": id, \"exp\": time.Now().Add(time.Second * time.Duration(global.Server.JWT.ExpireTime)).Unix(), } //创建token token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims) //or token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{ \"userID\": id, \"exp\": time.Now().Add(time.Second * time.Duration(global.Server.JWT.ExpireTime)).Unix(), }) //使用密钥签名 tokenString, err := token.SignedString([]byte(global.Server.JWT.Key)) //从头部中获取token auth := c.GetHeader(\"Authorization\") tokenString := auth[len(\"Bearer \"):]//切片 //解析token //允许你将特定声明解析到自定义的结构体中。 token, err := jwt.ParseWithClaims(tokenString, \u0026jwt.MapClaims{}, func(token *jwt.Token) (interface{}, error) { return []byte(jwtKey), nil }) //获取基本claims token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) { return []byte(global.Server.JWT.Key), nil }) claims, ok := token.Claims.(*jwt.MapClaims)//claims转换 token.vaild//token是否有效 strconv\n提供字符串与其他数据类型的互转\ngomail用于发送电子邮件\nregexp正则表达式\n//创建正则表达式对象 pattern := `^1[3456789]\\d{9}$` reg := regexp.MustCompile(pattern)//编译正则表达式 //匹配字符串 reg.MatchString(phone) //查找字符串 reg.FindString(phone) //查找字符串中所有符合条件的子串 reg.FindAllString(phone, -1) //替换字符串 reg.ReplaceAllString(phone, \"****\") 其他 iota\niota 是 Go 语言中的一个常量生成器，它用于在常量声明中生成连续的整数值。 iota 从 0 开始，每次在常量声明中使用它时都会自增 1。一般用于枚举常量，简化了常量的定义，使代码更具可读性。 const ( Sunday = iota // 0 Monday // 1 Tuesday // 2 Wednesday // 3 Thursday // 4 Friday // 5 Saturday // 6 ) ",
+  "wordCount" : "1933",
+  "inLanguage": "zh",
+  "image":"https://711lll711.github.io/posts/tech/team_reflection/go.jpg","datePublished": "2023-09-10T00:00:00Z",
+  "dateModified": "2023-09-10T00:00:00Z",
+  "author":[{
+    "@type": "Person",
+    "name": "Klutz"
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://711lll711.github.io/posts/tech/team_reflection/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Klutz's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://711lll711.github.io/img/avatar.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    (function () {
+        let  arr,reg = new RegExp("(^| )"+"change-themes"+"=([^;]*)(;|$)");
+        if(arr = document.cookie.match(reg)) {
+        } else {
+            if (new Date().getHours() >= 19 || new Date().getHours() < 6) {
+                document.body.classList.add('dark');
+                localStorage.setItem("pref-theme", 'dark');
+            } else {
+                document.body.classList.remove('dark');
+                localStorage.setItem("pref-theme", 'light');
+            }
+        }
+    })()
+
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://711lll711.github.io/" accesskey="h" title="Klutz&#39;s Blog (Alt + H)">
+            <img src="https://711lll711.github.io/img/avatar.png" alt="logo" aria-label="logo"
+                 height="35">Klutz&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://711lll711.github.io/search/" title="🔍搜索 (Alt &#43; /)" accesskey=/>
+                <span>🔍 搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://711lll711.github.io/" title="Klutz&#39;s Blog">
+                <span>🏠 主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://711lll711.github.io/archives/" title="⏱️时间轴">
+                <span>⏱️ 时间轴</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://711lll711.github.io/posts/" title="📚文章">
+                <span>📚 文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://711lll711.github.io/about/" title="🙋🏻‍♂️关于">
+                <span>🙋🏻‍♂️ 关于</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://711lll711.github.io/links/" title="🤝友链">
+                <span>🤝 友链</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://711lll711.github.io/tags/" title="🧩 标签">
+                <span>🧩 标签</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main page">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://711lll711.github.io/">🏠 主页</a>&nbsp;»&nbsp;<a href="https://711lll711.github.io/posts/">📚文章</a>&nbsp;»&nbsp;<a href="https://711lll711.github.io/posts/tech/">👨🏻‍💻 技术</a></div>
+    <h1 class="post-title">
+      team_todo项目复盘
+    </h1>
+    <div class="post-description">
+      teamtodo项目复盘与学习
+    </div>
+    <div class="post-meta">
+
+<style>
+    i[id*="post_meta_style"] {
+        display: flex;
+        align-items: center;
+        margin: 0 0 10px 0;
+    }
+
+    .parent-post-meta {
+        display: flex;
+        flex-wrap: wrap;
+        opacity: 0.8;
+    }
+</style>
+
+<span class="parent-post-meta">
+    <span id="post_meta_style_1">
+        <span class="fa fa-calendar-check-o"></span>
+        <span>2023-09-10
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    
+    
+    
+    
+    
+    
+    
+    <span id="post_meta_style_3">
+        <span class="fa fa-file-word-o"></span>
+        <span>1933字
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_4">
+        <span class="fa fa-clock-o"></span>
+        <span>4分钟
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_5">
+        <span class="fa fa-user-o"></span>
+        <span>Klutz
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_6">
+        <span class="fa fa-tags" style="opacity: 0.8"></span>
+        <span>
+            <span class="post-tags-meta">
+                <a href="https://711lll711.github.io/tags/go/" style="color: var(--secondary)!important;">go</a>
+                &nbsp;<a href="https://711lll711.github.io/tags/tech/" style="color: var(--secondary)!important;">tech</a>
+            </span>
+        </span>
+    </span>
+</span>
+
+
+</div>
+  </header> 
+<figure class="entry-cover"><img loading="lazy" src="https://711lll711.github.io/posts/tech/team_reflection/go.jpg" alt="golang">
+        <p>golang</p>
+</figure><aside id="toc-container" class="toc-container wide">
+    <div class="toc">
+        <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">目录</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#%e5%93%8d%e5%ba%94%e7%9a%84%e6%a0%bc%e5%bc%8f%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b%e8%ae%be%e8%ae%a1" aria-label="响应的格式、数据类型设计">响应的格式、数据类型设计</a></li>
+                <li>
+                    <a href="#%e6%95%b0%e6%8d%ae%e5%ba%93%e8%bf%9b%e9%98%b6%e6%93%8d%e4%bd%9c" aria-label="数据库进阶操作">数据库进阶操作</a></li>
+                <li>
+                    <a href="#%e5%a5%bd%e7%94%a8%e7%9a%84%e5%ba%93" aria-label="好用的库">好用的库</a></li>
+                <li>
+                    <a href="#%e5%85%b6%e4%bb%96" aria-label="其他">其他</a>
+                </li>
+            </ul>
+        </div>
+        </details>
+    </div>
+</aside>
+<script>
+    let activeElement;
+    let elements;
+    window.addEventListener('DOMContentLoaded', function (event) {
+        checkTocPosition();
+
+        elements = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]');
+        
+        activeElement = elements[0];
+        const id = encodeURI(activeElement.getAttribute('id')).toLowerCase();
+        document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+    }, false);
+
+    window.addEventListener('resize', function(event) {
+        checkTocPosition();
+    }, false);
+
+    window.addEventListener('scroll', () => {
+        
+        if (elements) {
+            activeElement = Array.from(elements).find((element) => {
+                if ((getOffsetTop(element) - window.pageYOffset) > 0 &&
+                    (getOffsetTop(element) - window.pageYOffset) < window.innerHeight/2) {
+                    return element;
+                }
+            }) || activeElement
+
+            elements.forEach(element => {
+                const id = encodeURI(element.getAttribute('id')).toLowerCase();
+                if (element === activeElement){
+                    document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+                } else {
+                    document.querySelector(`.inner ul li a[href="#${id}"]`).classList.remove('active');
+                }
+            })
+        }
+    }, false);
+
+    const main = parseInt(getComputedStyle(document.body).getPropertyValue('--article-width'), 10);
+    const toc = parseInt(getComputedStyle(document.body).getPropertyValue('--toc-width'), 10);
+    const gap = parseInt(getComputedStyle(document.body).getPropertyValue('--gap'), 10);
+
+    function checkTocPosition() {
+        const width = document.body.scrollWidth;
+        if (width - main - (toc * 2) - (gap * 4) > 0) {
+            document.getElementById("toc-container").classList.add("wide");
+        } else {
+            document.getElementById("toc-container").classList.remove("wide");
+        }
+    }
+
+    function getOffsetTop(element) {
+        if (!element.getClientRects().length) {
+            return 0;
+        }
+        let rect = element.getBoundingClientRect();
+        let win = element.ownerDocument.defaultView;
+        return rect.top + win.pageYOffset;
+    }
+</script>
+  <div class="post-content"><h2 id="响应的格式数据类型设计">响应的格式、数据类型设计<a hidden class="anchor" aria-hidden="true" href="#响应的格式数据类型设计">#</a></h2>
+<ol>
+<li>响应的数据全部存在data字段中，可以设置makereponse函数生成响应</li>
+<li>设计合适的结构体</li>
+</ol>
+<h2 id="数据库进阶操作">数据库进阶操作<a hidden class="anchor" aria-hidden="true" href="#数据库进阶操作">#</a></h2>
+<ol>
+<li>外键、主键、联合主键<br>
+主键：唯一标识某一行 <br>
+联合主键：多个列的值联合标识某一行<br>
+外键：将一个表的列与另一个表的列相关联，一个表中的外键值必须在另一个表中存在。用于实现一对多和多对多的查询</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">CREATE</span> <span style="color:#a6e22e">TABLE</span> <span style="color:#a6e22e">Orders</span> (
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">OrderID</span> <span style="color:#a6e22e">INT</span> <span style="color:#a6e22e">PRIMARY</span> <span style="color:#a6e22e">KEY</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">CustomerID</span> <span style="color:#a6e22e">INT</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">FOREIGN</span> <span style="color:#a6e22e">KEY</span> (<span style="color:#a6e22e">CustomerID</span>) <span style="color:#a6e22e">REFERENCES</span> <span style="color:#a6e22e">Customers</span>(<span style="color:#a6e22e">CustomerID</span>)
+</span></span><span style="display:flex;"><span>);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//连接多个表查询  
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//根据 order找出customer的country
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">country</span> <span style="color:#a6e22e">Country</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">global</span>.<span style="color:#a6e22e">GVA_DB</span>.
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Joins</span>(<span style="color:#e6db74">&#34;JOIN customers ON orders.customer_id = customers.id&#34;</span>).
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Joins</span>(<span style="color:#e6db74">&#34;JOIN countries ON customers.country_id = countries.id&#34;</span>).
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Where</span>(<span style="color:#e6db74">&#34;orders.id = ?&#34;</span>, <span style="color:#ae81ff">1</span>).
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Select</span>(<span style="color:#e6db74">&#34;countries.name&#34;</span>).
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">First</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">country</span>).<span style="color:#a6e22e">Error</span>; <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 处理查询错误
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>} <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 使用 country 数据
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//joins语法 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">Joins</span>(<span style="color:#e6db74">&#34;JOIN table_name ON condition&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//condition是SQL的条件语句
+</span></span></span></code></pre></div><ol start="2">
+<li>使用gorm创建、查询、更新、删除<br>
+如果涉及多个表同时查询写入，采用事务，方便回滚<br>
+预加载，它在一次查询中获取了关联的数据，而不是为每个主对象执行额外的查询。</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// 开始事务
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">tx</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">Begin</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 执行事务操作
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">tx</span>.<span style="color:#a6e22e">Create</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">User</span>{<span style="color:#a6e22e">Name</span>: <span style="color:#e6db74">&#34;Alice&#34;</span>}).<span style="color:#a6e22e">Error</span>; <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 发生错误，回滚事务
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">tx</span>.<span style="color:#a6e22e">Rollback</span>()
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 处理事务错误
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>} <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 事务操作成功，提交事务
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">tx</span>.<span style="color:#a6e22e">Commit</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ol start="3">
+<li>自动迁移表格automigrate<br>
+用于确保数据库中的表格结构与应用程序中的数据模型一致。</li>
+</ol>
+<h2 id="好用的库">好用的库<a hidden class="anchor" aria-hidden="true" href="#好用的库">#</a></h2>
+<ol>
+<li>copier</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>copier.Copy(&amp;employee, &amp;user) 
+</span></span></code></pre></div><p>就是将user对象中的字段赋值到employee的同名字段中。如果目标对象中没有同名的字段，则该字段被忽略。<br>
+比如创建群组功能，不需要单个字段赋值给group结构，只需要用copier把groupreq的字段传递给group即可</p>
+<ol start="2">
+<li>zap  日志库<br>
+从标准日志库log到zap</li>
+</ol>
+<ul>
+<li>
+<p>创建 Logger实例
+使用 Zap 创建一个 Logger 实例，Logger 用于记录日志消息。通常你会在应用程序的初始化代码中创建 Logger。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>logger, err := zap.NewProduction()// NewProduction() 和 NewDevelopment() NewExample() 三种模式
+</span></span><span style="display:flex;"><span>if err != nil {
+</span></span><span style="display:flex;"><span>    // 处理错误
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>defer logger.Sync() // 在程序退出时释放资源
+</span></span></code></pre></div></li>
+<li>
+<p>日志配置<br>
+zap.NewDevelopmentConfig() 是 Zap 日志库提供的一个函数，用于创建一个适用于开发和调试环境的日志配置。</p>
+<ul>
+<li>
+<p>Level: 默认设置为 Debug，允许记录所有日志级别，包括 Info、Debug、Warn、Error、   DPanic 和 Panic。</p>
+</li>
+<li>
+<p>Encoding: 默认使用 JSON 编码格式，以便日志可以轻松地被其他工具解析。</p>
+</li>
+<li>
+<p>Output Paths: 默认将日志输出到标准错误流（stderr），这在开发环境中通常是合适的。</p>
+</li>
+<li>
+<p>Error Output Paths: 默认将错误级别的日志（Error、DPanic 和 Panic）也输出到标准错误流。</p>
+</li>
+<li>
+<p>Encoder Config: 编码器配置允许对 JSON 编码进行一些自定义设置，如时间格式。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>日志级别
+Info(), Debug(), Warn(), Error(), Fatal()&hellip;</p>
+</li>
+<li>
+<p>结构化日志</p>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>logger.Info(&#34;User login&#34;, zap.String(&#34;username&#34;, &#34;john_doe&#34;), zap.Int(&#34;status_code&#34;, 200))
+</span></span></code></pre></div><ul>
+<li>设置全局字段</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>logger = logger.With(zap.String(&#34;app_name&#34;, &#34;MyApp&#34;))
+</span></span></code></pre></div><ul>
+<li>设置日志输出的位置</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span> // 创建一个输出到文件的 WriteSyncer
+</span></span><span style="display:flex;"><span>    fileWriter := zapcore.AddSync(file)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    // 创建一个 core
+</span></span><span style="display:flex;"><span>    fileCore := zapcore.NewCore(
+</span></span><span style="display:flex;"><span>        zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig()), // 或者使用其他编码器
+</span></span><span style="display:flex;"><span>        fileWriter,
+</span></span><span style="display:flex;"><span>        zap.DebugLevel, // 设置日志级别
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    // 创建 Logger
+</span></span><span style="display:flex;"><span>    logger := zap.New(fileCore, zap.AddCaller())
+</span></span><span style="display:flex;"><span>    defer logger.Sync()
+</span></span></code></pre></div><ol start="3">
+<li>mapstructure将map映射到结构体，viper解析配置文件<br>
+&ndash;无需自己写解析函数</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e"># config.yaml</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">Mysql</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">host</span>: <span style="color:#e6db74">&#34;localhost&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">port</span>: <span style="color:#e6db74">&#34;3306&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">user</span>: <span style="color:#e6db74">&#34;用户名&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">password</span>: <span style="color:#e6db74">&#34;数据库密码&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">charset</span>: <span style="color:#e6db74">&#34;utf8&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">database</span>: <span style="color:#e6db74">&#34;TeamToDo&#34;</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">MySQLConfig</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Host</span>     <span style="color:#66d9ef">string</span> <span style="color:#e6db74">`mapstructure:&#34;host&#34;`</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Port</span>     <span style="color:#66d9ef">string</span> <span style="color:#e6db74">`mapstructure:&#34;port&#34;`</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">User</span>     <span style="color:#66d9ef">string</span> <span style="color:#e6db74">`mapstructure:&#34;user&#34;`</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Password</span> <span style="color:#66d9ef">string</span> <span style="color:#e6db74">`mapstructure:&#34;password&#34;`</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Charset</span>  <span style="color:#66d9ef">string</span> <span style="color:#e6db74">`mapstructure:&#34;charset&#34;`</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Database</span> <span style="color:#66d9ef">string</span> <span style="color:#e6db74">`mapstructure:&#34;database&#34;`</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 从文件加载配置
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">viper</span>.<span style="color:#a6e22e">SetConfigFile</span>(<span style="color:#e6db74">&#34;config.yaml&#34;</span>)<span style="color:#75715e">//设置配置文件
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">viper</span>.<span style="color:#a6e22e">ReadInConfig</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalf</span>(<span style="color:#e6db74">&#34;读取配置文件失败: %v&#34;</span>, <span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 初始化一个空的 Config 结构体
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">config</span> <span style="color:#a6e22e">Config</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 使用 mapstructure 将配置文件加载到结构体中
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">viper</span>.<span style="color:#a6e22e">Unmarshal</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">config</span>, <span style="color:#a6e22e">viper</span>.<span style="color:#a6e22e">DecoderConfigOption</span>(<span style="color:#a6e22e">mapstructure</span>.<span style="color:#a6e22e">NewDecoderConfigOption</span>()))<span style="color:#75715e">//解码器
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalf</span>(<span style="color:#e6db74">&#34;解析配置文件失败: %v&#34;</span>, <span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 打印配置信息
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Mysql Host: %s\n&#34;</span>, <span style="color:#a6e22e">config</span>.<span style="color:#a6e22e">Mysql</span>.<span style="color:#a6e22e">Host</span>) 
+</span></span></code></pre></div><ol start="5">
+<li>rand生成随机数</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">New</span>(<span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">NewSource</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>().<span style="color:#a6e22e">UnixNano</span>())).<span style="color:#a6e22e">Intn</span>(<span style="color:#ae81ff">1000000</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">New</span>()<span style="color:#75715e">//创建随机数生成器
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">NewSource</span>()<span style="color:#75715e">//创建随机数种子
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">Intn</span>()<span style="color:#75715e">//随机数范围
+</span></span></span></code></pre></div><ol start="6">
+<li>jwt使用</li>
+</ol>
+<ul>
+<li>创建jwt</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">//创建claims
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">claims</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">jwt</span>.<span style="color:#a6e22e">MapClaims</span>{
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;userID&#34;</span>: <span style="color:#a6e22e">id</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;exp&#34;</span>:    <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>().<span style="color:#a6e22e">Add</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Duration</span>(<span style="color:#a6e22e">global</span>.<span style="color:#a6e22e">Server</span>.<span style="color:#a6e22e">JWT</span>.<span style="color:#a6e22e">ExpireTime</span>)).<span style="color:#a6e22e">Unix</span>(),
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//创建token
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">token</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">jwt</span>.<span style="color:#a6e22e">NewWithClaims</span>(<span style="color:#a6e22e">jwt</span>.<span style="color:#a6e22e">SigningMethodHS256</span>, <span style="color:#a6e22e">claims</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//or   
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">token</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">jwt</span>.<span style="color:#a6e22e">NewWithClaims</span>(<span style="color:#a6e22e">jwt</span>.<span style="color:#a6e22e">SigningMethodHS256</span>, <span style="color:#a6e22e">jwt</span>.<span style="color:#a6e22e">MapClaims</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;userID&#34;</span>: <span style="color:#a6e22e">id</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;exp&#34;</span>:    <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>().<span style="color:#a6e22e">Add</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Duration</span>(<span style="color:#a6e22e">global</span>.<span style="color:#a6e22e">Server</span>.<span style="color:#a6e22e">JWT</span>.<span style="color:#a6e22e">ExpireTime</span>)).<span style="color:#a6e22e">Unix</span>(),
+</span></span><span style="display:flex;"><span>	})
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//使用密钥签名
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">tokenString</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">token</span>.<span style="color:#a6e22e">SignedString</span>([]byte(<span style="color:#a6e22e">global</span>.<span style="color:#a6e22e">Server</span>.<span style="color:#a6e22e">JWT</span>.<span style="color:#a6e22e">Key</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//从头部中获取token
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">auth</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">GetHeader</span>(<span style="color:#e6db74">&#34;Authorization&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">tokenString</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">auth</span>[len(<span style="color:#e6db74">&#34;Bearer &#34;</span>):]<span style="color:#75715e">//切片
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//解析token
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//允许你将特定声明解析到自定义的结构体中。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">token</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">jwt</span>.<span style="color:#a6e22e">ParseWithClaims</span>(<span style="color:#a6e22e">tokenString</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">jwt</span>.<span style="color:#a6e22e">MapClaims</span>{}, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">token</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">jwt</span>.<span style="color:#a6e22e">Token</span>) (<span style="color:#66d9ef">interface</span>{}, <span style="color:#66d9ef">error</span>) {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span> []byte(<span style="color:#a6e22e">jwtKey</span>), <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>		})
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//获取基本claims
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">token</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">jwt</span>.<span style="color:#a6e22e">Parse</span>(<span style="color:#a6e22e">tokenString</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">token</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">jwt</span>.<span style="color:#a6e22e">Token</span>) (<span style="color:#66d9ef">interface</span>{}, <span style="color:#66d9ef">error</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> []byte(<span style="color:#a6e22e">global</span>.<span style="color:#a6e22e">Server</span>.<span style="color:#a6e22e">JWT</span>.<span style="color:#a6e22e">Key</span>), <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>    })
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">claims</span>, <span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">token</span>.<span style="color:#a6e22e">Claims</span>.(<span style="color:#f92672">*</span><span style="color:#a6e22e">jwt</span>.<span style="color:#a6e22e">MapClaims</span>)<span style="color:#75715e">//claims转换
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">token</span>.<span style="color:#a6e22e">vaild</span><span style="color:#75715e">//token是否有效
+</span></span></span></code></pre></div><ol start="7">
+<li>
+<p>strconv<br>
+提供字符串与其他数据类型的互转</p>
+</li>
+<li>
+<p>gomail用于发送电子邮件</p>
+</li>
+<li>
+<p>regexp正则表达式</p>
+</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">//创建正则表达式对象
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">pattern</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">`^1[3456789]\d{9}$`</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">reg</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">regexp</span>.<span style="color:#a6e22e">MustCompile</span>(<span style="color:#a6e22e">pattern</span>)<span style="color:#75715e">//编译正则表达式
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//匹配字符串
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">reg</span>.<span style="color:#a6e22e">MatchString</span>(<span style="color:#a6e22e">phone</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//查找字符串
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">reg</span>.<span style="color:#a6e22e">FindString</span>(<span style="color:#a6e22e">phone</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//查找字符串中所有符合条件的子串
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">reg</span>.<span style="color:#a6e22e">FindAllString</span>(<span style="color:#a6e22e">phone</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//替换字符串
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">reg</span>.<span style="color:#a6e22e">ReplaceAllString</span>(<span style="color:#a6e22e">phone</span>, <span style="color:#e6db74">&#34;****&#34;</span>)
+</span></span></code></pre></div><h2 id="其他">其他<a hidden class="anchor" aria-hidden="true" href="#其他">#</a></h2>
+<ol>
+<li>iota<br>
+iota 是 Go 语言中的一个常量生成器，它用于在常量声明中生成连续的整数值。 <br>
+iota 从 0 开始，每次在常量声明中使用它时都会自增 1。一般用于枚举常量，简化了常量的定义，使代码更具可读性。</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> (
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">Sunday</span> = <span style="color:#66d9ef">iota</span> <span style="color:#75715e">// 0
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">Monday</span>        <span style="color:#75715e">// 1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">Tuesday</span>       <span style="color:#75715e">// 2
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">Wednesday</span>     <span style="color:#75715e">// 3
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">Thursday</span>      <span style="color:#75715e">// 4
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">Friday</span>        <span style="color:#75715e">// 5
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">Saturday</span>      <span style="color:#75715e">// 6
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	)
+</span></span></code></pre></div>
+
+  </div>
+
+<style>
+    .comments_details summary::marker {
+        font-size: 20px;
+        content: '👉展开评论';
+        color: var(--content);
+    }
+    .comments_details[open] summary::marker{
+        font-size: 20px;
+        content: '👇关闭评论';
+        color: var(--content);
+    }
+</style>
+
+
+<div>
+    <div class="pagination__title">
+        <span class="pagination__title-h" style="font-size: 20px;">💬评论</span>
+        <hr />
+    </div>
+    <div id="tcomment"></div>
+    <script src="https://cdn.staticfile.org/twikoo/1.6.19/twikoo.all.min.js"></script>
+    <script>
+        twikoo.init({
+            envId: "https://klutz.zeabur.app",  
+            el: "#tcomment",
+            lang: 'zh-CN',
+            region: 'ap-shanghai',  
+            path: window.TWIKOO_MAGIC_PATH||window.location.pathname,
+        });
+    </script>
+</div>
+
+
+  
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://711lll711.github.io/tags/go/">go</a></li>
+      <li><a href="https://711lll711.github.io/tags/tech/">tech</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="next" href="https://711lll711.github.io/posts/read/thenotebook/">
+    <span class="title">下一页 »</span>
+    <br>
+    <span>恋恋笔记本</span>
+  </a>
+</nav>
+
+  </footer>
+
+  
+</article>
+</main>
+
+<footer class="footer">
+    <span>
+        Copyright
+        &copy;
+        2023-2023
+        <a href="https://711lll711.github.io/" style="color:#939393;">Klutz&#39;s Blog</a>
+        All Rights Reserved
+    </span>
+    <a href="https://beian.miit.gov.cn/" target="_blank" style="color:#939393;"></a>&nbsp;
+    <span>
+        <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=null"
+           style="display:inline-block;text-decoration:none;height:20px;color:#939393;">
+            <img src="" style="float:left;margin: 0px 5px 0px 0px;"/>
+            
+        </a>
+    </span>
+    <span id="busuanzi_container">
+        <span class="fa fa-user"></span> <span id="busuanzi_value_site_uv"></span>
+        <span class="fa fa-eye"></span> <span id="busuanzi_value_site_pv"></span>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <span class="topInner">
+        <svg class="topSvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+            <path d="M12 6H0l6-6z"/>
+        </svg>
+        <span id="read_progress"></span>
+    </span>
+</a>
+
+<script>
+    document.addEventListener('scroll', function (e) {
+        const readProgress = document.getElementById("read_progress");
+        const scrollHeight = document.documentElement.scrollHeight;
+        const clientHeight = document.documentElement.clientHeight;
+        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        readProgress.innerText = ((scrollTop / (scrollHeight - clientHeight)).toFixed(2) * 100).toFixed(0);
+    })
+</script>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+</script>
+<script>
+    let mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        (function() {
+            document.cookie = "change-themes" + "="+ escape ("false");
+        })()
+
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    });
+</script>
+
+<script>
+    document.body.addEventListener('copy', function (e) {
+        if (window.getSelection().toString() && window.getSelection().toString().length > 50) {
+            let clipboardData = e.clipboardData || window.clipboardData;
+            if (clipboardData) {
+                e.preventDefault();
+                let htmlData = window.getSelection().toString() +
+                    '\r\n\n————————————————\r\n' +
+                    '版权声明：本文为「'+"Klutz's Blog"+'」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。' +
+                '\r\n原文链接：' + location.href;
+                let textData = window.getSelection().toString() +
+                    '\r\n\n————————————————\r\n' +
+                    '版权声明：本文为「'+"Klutz's Blog"+'」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。' +
+                '\r\n原文链接：' + location.href;
+                clipboardData.setData('text/html', htmlData);
+                clipboardData.setData('text/plain', textData);
+            }
+        }
+    });
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = '复制';
+
+        function copyingDone() {
+            copybutton.innerText = '已复制！';
+            setTimeout(() => {
+                copybutton.innerText = '复制';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                let text = codeblock.textContent +
+                    '\r\n————————————————\r\n' +
+                    '版权声明：本文为「'+"Klutz's Blog"+'」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。' +
+                '\r\n原文链接：' + location.href;
+                navigator.clipboard.writeText(text);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) {}
+            selection.removeRange(range);
+        });
+
+        let language = codeblock.className.replaceAll("language-", "")
+        let macTool = document.createElement("div")
+        let macTool1 = document.createElement("div")
+        let macTool2 = document.createElement("div")
+        let macTool3 = document.createElement("div")
+        let languageType = document.createElement("div")
+        languageType.innerText = language
+        macTool.setAttribute('class', 'mac-tool')
+        macTool1.setAttribute('class', 'mac bb1')
+        macTool2.setAttribute('class', 'mac bb2')
+        macTool3.setAttribute('class', 'mac bb3')
+        languageType.setAttribute('class', 'language-type')
+        macTool.appendChild(macTool1)
+        macTool.appendChild(macTool2)
+        macTool.appendChild(macTool3)
+        macTool.appendChild(languageType)
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+            container.appendChild(macTool)
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+            container.appendChild(macTool)
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+            container.appendChild(macTool)
+        }
+    });
+</script>
+</body>
+
+</html>
