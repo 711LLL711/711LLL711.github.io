@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>vmware安装ubuntu并配置静态ip | Klutz&#39;s Blog</title>
+<meta name="keywords" content="linux, internet">
+<meta name="description" content="DHCP自动分配ip虽然方便，但我们还是希望服务器的ip是不变的，所以一起来配静态ip吧！">
+<meta name="author" content="Klutz">
+<link rel="canonical" href="https://711lll711.github.io/posts/tech/ubuntusetup/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.css" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.js" onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://711lll711.github.io/img/avatar.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://711lll711.github.io/img/avatar.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="https://711lll711.github.io/img/avatar.ico">
+<link rel="apple-touch-icon" href="https://711lll711.github.io/img/avatar.ico">
+<link rel="mask-icon" href="https://711lll711.github.io/img/avatar.ico">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js"></script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = ""; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<meta property="og:title" content="vmware安装ubuntu并配置静态ip" />
+<meta property="og:description" content="DHCP自动分配ip虽然方便，但我们还是希望服务器的ip是不变的，所以一起来配静态ip吧！" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://711lll711.github.io/posts/tech/ubuntusetup/" />
+<meta property="og:image" content="https://711lll711.github.io/posts/tech/ubuntusetup/ubuntu.jpg" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-09-12T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-09-12T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://711lll711.github.io/posts/tech/ubuntusetup/ubuntu.jpg" />
+<meta name="twitter:title" content="vmware安装ubuntu并配置静态ip"/>
+<meta name="twitter:description" content="DHCP自动分配ip虽然方便，但我们还是希望服务器的ip是不变的，所以一起来配静态ip吧！"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+
+        {
+          "@type": "ListItem",
+          "position":  1 ,
+          "name": "📚文章",
+          "item": "https://711lll711.github.io/posts/"
+        },
+
+        {
+          "@type": "ListItem",
+          "position":  2 ,
+          "name": "👨🏻‍💻 技术",
+          "item": "https://711lll711.github.io/posts/tech/"
+        }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "vmware安装ubuntu并配置静态ip",
+      "item": "https://711lll711.github.io/posts/tech/ubuntusetup/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "vmware安装ubuntu并配置静态ip",
+  "name": "vmware安装ubuntu并配置静态ip",
+  "description": "DHCP自动分配ip虽然方便，但我们还是希望服务器的ip是不变的，所以一起来配静态ip吧！",
+  "keywords": [
+    "linux", "internet"
+  ],
+  "articleBody": "下载vmware workstation并安装ubuntu 下载好vm和ubuntu iso文件，一直下一步就好啦~ 装好ubuntu后用apt下两个必要工具，vim用来编辑文件，net-tools用来查看网络状态\nsudo apt install vim sudo apt install net-tools NAT联网，固定静态ip 概念简介 ip: 用来标识网络中的一台主机，ip地址由32位二进制数组成，分为网络号和主机号两部分，网络号用来标识网络，主机号用来标识主机。ip地址分为公网ip和私网ip，公网ip是可以直接访问的，私网ip只能在局域网内访问。ip地址分为ipv4和ipv6。 子网掩码： 用来标识ip地址中网络号和主机号的分界线，子网掩码也是32位二进制数，子网掩码中的网络号部分全为1，主机号部分全为0。子网掩码和ip地址进行与运算，得到的结果就是网络号。子网掩码的作用是用来判断两台主机是否在同一个局域网内，如果两台主机的ip地址与子网掩码进行与运算，得到的结果相同，那么这两台主机就在同一个局域网内，可以直接通信，否则就需要通过路由器进行通信。 网关： 网关是一台主机，它的ip地址是局域网内的一个ip地址，顾名思义就是公网与局域网之间的大门~网关的作用是将局域网内的数据转发到公网上，或者将公网上的数据转发到局域网内。网关的ip地址一般是局域网内的第一个ip地址，也就是网络号不变，主机号为0的ip地址。 DNS： DNS是一种域名解析服务，它的作用是将域名解析成ip地址。 NAT联网 什么是NAT？\n原理参考韩顺平linux\n固定静态ip 在我们没有设置静态ip之前，默认是使用DHCP自动分配ip，也是可以上网的，但是每次重启虚拟机，ip地址都会变化，这样就不方便了。所以我们需要设置静态ip。\n方法1：图形化界面 打开设置，选择网络，齿轮，选择Wired Settings 点击齿轮，选择IPv4，选择Manual，填入ip地址，子网掩码，网关，DNS\n怎么确定这些值？ 在windows主机上打开cmd，输入ipconfig，我们看的是vmnet8的ip地址，子网掩码，网关，DNS 在ubuntu填入值： ip:直接固定为DHCP分配的ip地址 子网掩码：与vmnet8保持一致 网关：vmnet8的ip地址 DNS：8.8.8.8就行 点击Apply，然后重启网络服务。 方法2：命令行 按照方法1同样的数值配置修改相关参数\n修改网络配置文件 //su进入根目录后 vim /etc/netplan/01-network-manager-all.yaml //修改文件内容如下 network: version: 2 renderer: NetworkManager ethernets: ens33: dhcp4: no # 取消自动分配ip addresses: [192.168.1.10/24] # 你的虚拟机的ipv4地址/子网掩码 routes: - to: 0.0.0.0/0 via: 192.168.0.1 # 这里是你的网关地址 metric: 100 nameservers: addresses: [8.8.8.8, 8.8.4.4] #DNS地址 重启网络服务，查看ip sudo netplan apply sudo systemctl restart NetworkManager ifconfig 踩坑记录 su root显示 authentication failure 原因： 这是因为在Ubuntu中，默认情况下，root 用户是被禁用的，不允许直接登录。相反，Ubuntu鼓励使用 sudo 命令以普通用户的身份来执行需要超级用户权限的操作。\n解决方法：\n在普通用户的帐户下使用 sudo 命令来执行需要超级用户权 sudo command_to_run_as_root 设置root密码 sudo passwd root 修改yaml后warning 有的教程写的是gateway4:…, 但提示warning: gateway4 has been deprecated, use default routes instead. See the ‘Default routes’ section of the documentation for more details. 所以修改为\nroutes: - to: 0.0.0.0/0* via: 192.168.0.1 # 这里是你的网关地址 metric: 100 解释：\nto: 0.0.0.0/0 表示所有非本地流量都将通过 via 字段指定的网关（你的网关地址）进行路由。metric 字段是一个可选的参数，用于指定路由的优先级，通常可以设置为100或更高。\n",
+  "wordCount" : "1376",
+  "inLanguage": "zh",
+  "image":"https://711lll711.github.io/posts/tech/ubuntusetup/ubuntu.jpg","datePublished": "2023-09-12T00:00:00Z",
+  "dateModified": "2023-09-12T00:00:00Z",
+  "author":[{
+    "@type": "Person",
+    "name": "Klutz"
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://711lll711.github.io/posts/tech/ubuntusetup/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Klutz's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://711lll711.github.io/img/avatar.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    (function () {
+        let  arr,reg = new RegExp("(^| )"+"change-themes"+"=([^;]*)(;|$)");
+        if(arr = document.cookie.match(reg)) {
+        } else {
+            if (new Date().getHours() >= 19 || new Date().getHours() < 6) {
+                document.body.classList.add('dark');
+                localStorage.setItem("pref-theme", 'dark');
+            } else {
+                document.body.classList.remove('dark');
+                localStorage.setItem("pref-theme", 'light');
+            }
+        }
+    })()
+
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://711lll711.github.io/" accesskey="h" title="Klutz&#39;s Blog (Alt + H)">
+            <img src="https://711lll711.github.io/img/avatar.png" alt="logo" aria-label="logo"
+                 height="35">Klutz&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://711lll711.github.io/search/" title="🔍搜索 (Alt &#43; /)" accesskey=/>
+                <span>🔍 搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://711lll711.github.io/" title="Klutz&#39;s Blog">
+                <span>🏠 主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://711lll711.github.io/archives/" title="⏱️时间轴">
+                <span>⏱️ 时间轴</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://711lll711.github.io/posts/" title="📚文章">
+                <span>📚 文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://711lll711.github.io/about/" title="🙋🏻‍♂️关于">
+                <span>🙋🏻‍♂️ 关于</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://711lll711.github.io/links/" title="🤝友链">
+                <span>🤝 友链</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://711lll711.github.io/tags/" title="🧩 标签">
+                <span>🧩 标签</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main page">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://711lll711.github.io/">🏠 主页</a>&nbsp;»&nbsp;<a href="https://711lll711.github.io/posts/">📚文章</a>&nbsp;»&nbsp;<a href="https://711lll711.github.io/posts/tech/">👨🏻‍💻 技术</a></div>
+    <h1 class="post-title">
+      vmware安装ubuntu并配置静态ip
+    </h1>
+    <div class="post-description">
+      DHCP自动分配ip虽然方便，但我们还是希望服务器的ip是不变的，所以一起来配静态ip吧！
+    </div>
+    <div class="post-meta">
+
+<style>
+    i[id*="post_meta_style"] {
+        display: flex;
+        align-items: center;
+        margin: 0 0 10px 0;
+    }
+
+    .parent-post-meta {
+        display: flex;
+        flex-wrap: wrap;
+        opacity: 0.8;
+    }
+</style>
+
+<span class="parent-post-meta">
+    <span id="post_meta_style_1">
+        <span class="fa fa-calendar-check-o"></span>
+        <span>2023-09-12
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    
+    
+    
+    
+    
+    
+    
+    <span id="post_meta_style_3">
+        <span class="fa fa-file-word-o"></span>
+        <span>1376字
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_4">
+        <span class="fa fa-clock-o"></span>
+        <span>3分钟
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_5">
+        <span class="fa fa-user-o"></span>
+        <span>Klutz
+            &nbsp;&nbsp;
+        </span>
+    </span>
+    <span id="post_meta_style_6">
+        <span class="fa fa-tags" style="opacity: 0.8"></span>
+        <span>
+            <span class="post-tags-meta">
+                <a href="https://711lll711.github.io/tags/linux/" style="color: var(--secondary)!important;">linux</a>
+                &nbsp;<a href="https://711lll711.github.io/tags/tech/" style="color: var(--secondary)!important;">tech</a>
+            </span>
+        </span>
+    </span>
+</span>
+
+
+</div>
+  </header> 
+<figure class="entry-cover"><img loading="lazy" src="https://711lll711.github.io/posts/tech/ubuntusetup/ubuntu.jpg" alt="ubuntu">
+        <p>ubuntu</p>
+</figure><aside id="toc-container" class="toc-container wide">
+    <div class="toc">
+        <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">目录</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#%e4%b8%8b%e8%bd%bdvmware-workstation%e5%b9%b6%e5%ae%89%e8%a3%85ubuntu" aria-label="下载vmware workstation并安装ubuntu">下载vmware workstation并安装ubuntu</a></li>
+                <li>
+                    <a href="#nat%e8%81%94%e7%bd%91%e5%9b%ba%e5%ae%9a%e9%9d%99%e6%80%81ip" aria-label="NAT联网，固定静态ip">NAT联网，固定静态ip</a><ul>
+                        
+                <li>
+                    <a href="#%e6%a6%82%e5%bf%b5%e7%ae%80%e4%bb%8b" aria-label="概念简介">概念简介</a></li>
+                <li>
+                    <a href="#nat%e8%81%94%e7%bd%91" aria-label="NAT联网">NAT联网</a></li>
+                <li>
+                    <a href="#%e5%9b%ba%e5%ae%9a%e9%9d%99%e6%80%81ip" aria-label="固定静态ip">固定静态ip</a><ul>
+                        
+                <li>
+                    <a href="#%e6%96%b9%e6%b3%951%e5%9b%be%e5%bd%a2%e5%8c%96%e7%95%8c%e9%9d%a2" aria-label="方法1：图形化界面">方法1：图形化界面</a></li>
+                <li>
+                    <a href="#%e6%96%b9%e6%b3%952%e5%91%bd%e4%bb%a4%e8%a1%8c" aria-label="方法2：命令行">方法2：命令行</a></li></ul>
+                </li></ul>
+                </li>
+                <li>
+                    <a href="#%e8%b8%a9%e5%9d%91%e8%ae%b0%e5%bd%95" aria-label="踩坑记录">踩坑记录</a><ul>
+                        
+                <li>
+                    <a href="#su-root%e6%98%be%e7%a4%ba-authentication-failure" aria-label="su root显示 authentication failure">su root显示 authentication failure</a></li>
+                <li>
+                    <a href="#%e4%bf%ae%e6%94%b9yaml%e5%90%8ewarning" aria-label="修改yaml后warning">修改yaml后warning</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+        </details>
+    </div>
+</aside>
+<script>
+    let activeElement;
+    let elements;
+    window.addEventListener('DOMContentLoaded', function (event) {
+        checkTocPosition();
+
+        elements = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]');
+        
+        activeElement = elements[0];
+        const id = encodeURI(activeElement.getAttribute('id')).toLowerCase();
+        document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+    }, false);
+
+    window.addEventListener('resize', function(event) {
+        checkTocPosition();
+    }, false);
+
+    window.addEventListener('scroll', () => {
+        
+        if (elements) {
+            activeElement = Array.from(elements).find((element) => {
+                if ((getOffsetTop(element) - window.pageYOffset) > 0 &&
+                    (getOffsetTop(element) - window.pageYOffset) < window.innerHeight/2) {
+                    return element;
+                }
+            }) || activeElement
+
+            elements.forEach(element => {
+                const id = encodeURI(element.getAttribute('id')).toLowerCase();
+                if (element === activeElement){
+                    document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+                } else {
+                    document.querySelector(`.inner ul li a[href="#${id}"]`).classList.remove('active');
+                }
+            })
+        }
+    }, false);
+
+    const main = parseInt(getComputedStyle(document.body).getPropertyValue('--article-width'), 10);
+    const toc = parseInt(getComputedStyle(document.body).getPropertyValue('--toc-width'), 10);
+    const gap = parseInt(getComputedStyle(document.body).getPropertyValue('--gap'), 10);
+
+    function checkTocPosition() {
+        const width = document.body.scrollWidth;
+        if (width - main - (toc * 2) - (gap * 4) > 0) {
+            document.getElementById("toc-container").classList.add("wide");
+        } else {
+            document.getElementById("toc-container").classList.remove("wide");
+        }
+    }
+
+    function getOffsetTop(element) {
+        if (!element.getClientRects().length) {
+            return 0;
+        }
+        let rect = element.getBoundingClientRect();
+        let win = element.ownerDocument.defaultView;
+        return rect.top + win.pageYOffset;
+    }
+</script>
+  <div class="post-content"><h2 id="下载vmware-workstation并安装ubuntu">下载vmware workstation并安装ubuntu<a hidden class="anchor" aria-hidden="true" href="#下载vmware-workstation并安装ubuntu">#</a></h2>
+<p>下载好vm和ubuntu iso文件，一直下一步就好啦~  <br>
+装好ubuntu后用apt下两个必要工具，vim用来编辑文件，net-tools用来查看网络状态</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo apt install vim
+</span></span><span style="display:flex;"><span>sudo apt install net-tools
+</span></span></code></pre></div><h2 id="nat联网固定静态ip">NAT联网，固定静态ip<a hidden class="anchor" aria-hidden="true" href="#nat联网固定静态ip">#</a></h2>
+<h3 id="概念简介">概念简介<a hidden class="anchor" aria-hidden="true" href="#概念简介">#</a></h3>
+<ol>
+<li>ip:
+用来<code>标识网络中的一台主机</code>，ip地址由32位二进制数组成，分为网络号和主机号两部分，网络号用来标识网络，主机号用来标识主机。ip地址分为公网ip和私网ip，公网ip是可以直接访问的，私网ip只能在局域网内访问。ip地址分为ipv4和ipv6。</li>
+<li>子网掩码：
+用来标识ip地址中网络号和主机号的分界线，子网掩码也是32位二进制数，子网掩码中的网络号部分全为1，主机号部分全为0。子网掩码和ip地址进行<code>与运算</code>，得到的结果就是网络号。子网掩码的作用是用来判断两台主机是否在同一个局域网内，如果两台主机的ip地址与子网掩码进行与运算，得到的结果相同，那么这两台主机就在<code>同一个局域网</code>内，可以直接通信，否则就需要通过路由器进行通信。</li>
+<li>网关：
+网关是一台主机，它的ip地址是局域网内的一个ip地址，顾名思义就是<code>公网与局域网之间的大门</code>~网关的作用是将局域网内的数据转发到公网上，或者将公网上的数据转发到局域网内。网关的ip地址一般是局域网内的第一个ip地址，也就是网络号不变，主机号为0的ip地址。</li>
+<li>DNS：
+DNS是一种域名解析服务，它的作用是将<code>域名解析成ip地址</code>。</li>
+</ol>
+<h3 id="nat联网">NAT联网<a hidden class="anchor" aria-hidden="true" href="#nat联网">#</a></h3>
+<blockquote>
+<p>什么是NAT？<br>
+原理参考<a href="https://www.bilibili.com/video/BV1Sv411r7vd?p=63&amp;vd_source=0eed6cf5f9626548f201d318112f2680">韩顺平linux</a></p>
+</blockquote>
+<h3 id="固定静态ip">固定静态ip<a hidden class="anchor" aria-hidden="true" href="#固定静态ip">#</a></h3>
+<p>在我们没有设置静态ip之前，默认是使用DHCP自动分配ip，也是可以上网的，但是每次重启虚拟机，ip地址都会变化，这样就不方便了。所以我们需要设置静态ip。</p>
+<h4 id="方法1图形化界面">方法1：图形化界面<a hidden class="anchor" aria-hidden="true" href="#方法1图形化界面">#</a></h4>
+<ol>
+<li>打开设置，选择网络，齿轮，选择Wired Settings  <br>
+<img loading="lazy" src="1.png" alt="进入网络设置"  />
+</li>
+<li>点击齿轮，选择IPv4，选择Manual，填入ip地址，子网掩码，网关，DNS<br>
+<img loading="lazy" src="3.png" alt="手动设置"  />
+</li>
+<li>怎么确定这些值？
+<ul>
+<li>在windows主机上打开cmd，输入ipconfig，我们看的是vmnet8的ip地址，子网掩码，网关，DNS</li>
+<li>在ubuntu填入值：
+<ul>
+<li>ip:直接固定为DHCP分配的ip地址</li>
+<li>子网掩码：与vmnet8保持一致</li>
+<li>网关：vmnet8的ip地址</li>
+<li>DNS：8.8.8.8就行 <br>
+<img loading="lazy" src="2.png" alt="ip设置"  />
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>点击Apply，然后重启网络服务。</li>
+</ol>
+<h4 id="方法2命令行">方法2：命令行<a hidden class="anchor" aria-hidden="true" href="#方法2命令行">#</a></h4>
+<p>按照方法1同样的数值配置修改相关参数</p>
+<ol>
+<li>修改网络配置文件</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>//su进入根目录后
+</span></span><span style="display:flex;"><span>vim /etc/netplan/01-network-manager-all.yaml
+</span></span><span style="display:flex;"><span>//修改文件内容如下
+</span></span><span style="display:flex;"><span>network:
+</span></span><span style="display:flex;"><span>  version: <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>  renderer: NetworkManager
+</span></span><span style="display:flex;"><span>  ethernets:
+</span></span><span style="display:flex;"><span>    ens33:
+</span></span><span style="display:flex;"><span>      dhcp4: no <span style="color:#75715e"># 取消自动分配ip</span>
+</span></span><span style="display:flex;"><span>      addresses: <span style="color:#f92672">[</span>192.168.1.10/24<span style="color:#f92672">]</span> <span style="color:#75715e"># 你的虚拟机的ipv4地址/子网掩码</span>
+</span></span><span style="display:flex;"><span>      routes:
+</span></span><span style="display:flex;"><span>        - to: 0.0.0.0/0
+</span></span><span style="display:flex;"><span>          via: 192.168.0.1 <span style="color:#75715e"># 这里是你的网关地址</span>
+</span></span><span style="display:flex;"><span>          metric: <span style="color:#ae81ff">100</span>
+</span></span><span style="display:flex;"><span>      nameservers:
+</span></span><span style="display:flex;"><span>        addresses: <span style="color:#f92672">[</span>8.8.8.8, 8.8.4.4<span style="color:#f92672">]</span> <span style="color:#75715e">#DNS地址</span>
+</span></span></code></pre></div><ol start="2">
+<li>重启网络服务，查看ip</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo netplan apply
+</span></span><span style="display:flex;"><span>sudo systemctl restart NetworkManager
+</span></span><span style="display:flex;"><span>ifconfig
+</span></span></code></pre></div><h2 id="踩坑记录">踩坑记录<a hidden class="anchor" aria-hidden="true" href="#踩坑记录">#</a></h2>
+<h3 id="su-root显示-authentication-failure">su root显示 authentication failure<a hidden class="anchor" aria-hidden="true" href="#su-root显示-authentication-failure">#</a></h3>
+<p>原因： 这是因为在Ubuntu中，默认情况下，root 用户是被禁用的，不允许直接登录。相反，Ubuntu鼓励使用 sudo 命令以普通用户的身份来执行需要超级用户权限的操作。<br>
+解决方法：</p>
+<ol>
+<li>在普通用户的帐户下使用 sudo 命令来执行需要超级用户权</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo command_to_run_as_root
+</span></span></code></pre></div><ol start="2">
+<li>设置root密码</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo passwd root
+</span></span></code></pre></div><h3 id="修改yaml后warning">修改yaml后warning<a hidden class="anchor" aria-hidden="true" href="#修改yaml后warning">#</a></h3>
+<p>有的教程写的是gateway4:&hellip;,
+但提示warning: <code>gateway4</code> has been deprecated, use default routes instead. <br>
+See the &lsquo;Default routes&rsquo; section of the documentation for more details. <br>
+所以修改为</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>routes:
+</span></span><span style="display:flex;"><span>  - to: 0.0.0.0/0*
+</span></span><span style="display:flex;"><span>    via: 192.168.0.1 <span style="color:#75715e"># 这里是你的网关地址</span>
+</span></span><span style="display:flex;"><span>    metric: <span style="color:#ae81ff">100</span>
+</span></span></code></pre></div><p>解释：<br>
+to: 0.0.0.0/0 表示所有非本地流量都将通过 via 字段指定的网关（你的网关地址）进行路由。metric 字段是一个可选的参数，用于指定路由的优先级，通常可以设置为100或更高。</p>
+
+
+  </div>
+
+<style>
+    .comments_details summary::marker {
+        font-size: 20px;
+        content: '👉展开评论';
+        color: var(--content);
+    }
+    .comments_details[open] summary::marker{
+        font-size: 20px;
+        content: '👇关闭评论';
+        color: var(--content);
+    }
+</style>
+
+
+<div>
+    <div class="pagination__title">
+        <span class="pagination__title-h" style="font-size: 20px;">💬评论</span>
+        <hr />
+    </div>
+    <div id="tcomment"></div>
+    <script src="https://cdn.staticfile.org/twikoo/1.6.19/twikoo.all.min.js"></script>
+    <script>
+        twikoo.init({
+            envId: "https://klutz.zeabur.app",  
+            el: "#tcomment",
+            lang: 'zh-CN',
+            region: 'ap-shanghai',  
+            path: window.TWIKOO_MAGIC_PATH||window.location.pathname,
+        });
+    </script>
+</div>
+
+
+  
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://711lll711.github.io/tags/linux/">linux</a></li>
+      <li><a href="https://711lll711.github.io/tags/tech/">tech</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="next" href="https://711lll711.github.io/posts/tech/team_reflection/">
+    <span class="title">下一页 »</span>
+    <br>
+    <span>team_todo项目复盘</span>
+  </a>
+</nav>
+
+  </footer>
+
+  
+</article>
+</main>
+
+<footer class="footer">
+    <span>
+        Copyright
+        &copy;
+        2023-2023
+        <a href="https://711lll711.github.io/" style="color:#939393;">Klutz&#39;s Blog</a>
+        All Rights Reserved
+    </span>
+    <a href="https://beian.miit.gov.cn/" target="_blank" style="color:#939393;"></a>&nbsp;
+    <span>
+        <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=null"
+           style="display:inline-block;text-decoration:none;height:20px;color:#939393;">
+            <img src="" style="float:left;margin: 0px 5px 0px 0px;"/>
+            
+        </a>
+    </span>
+    <span id="busuanzi_container">
+        <span class="fa fa-user"></span> <span id="busuanzi_value_site_uv"></span>
+        <span class="fa fa-eye"></span> <span id="busuanzi_value_site_pv"></span>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <span class="topInner">
+        <svg class="topSvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+            <path d="M12 6H0l6-6z"/>
+        </svg>
+        <span id="read_progress"></span>
+    </span>
+</a>
+
+<script>
+    document.addEventListener('scroll', function (e) {
+        const readProgress = document.getElementById("read_progress");
+        const scrollHeight = document.documentElement.scrollHeight;
+        const clientHeight = document.documentElement.clientHeight;
+        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        readProgress.innerText = ((scrollTop / (scrollHeight - clientHeight)).toFixed(2) * 100).toFixed(0);
+    })
+</script>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+</script>
+<script>
+    let mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        (function() {
+            document.cookie = "change-themes" + "="+ escape ("false");
+        })()
+
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    });
+</script>
+
+<script>
+    document.body.addEventListener('copy', function (e) {
+        if (window.getSelection().toString() && window.getSelection().toString().length > 50) {
+            let clipboardData = e.clipboardData || window.clipboardData;
+            if (clipboardData) {
+                e.preventDefault();
+                let htmlData = window.getSelection().toString() +
+                    '\r\n\n————————————————\r\n' +
+                    '版权声明：本文为「'+"Klutz's Blog"+'」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。' +
+                '\r\n原文链接：' + location.href;
+                let textData = window.getSelection().toString() +
+                    '\r\n\n————————————————\r\n' +
+                    '版权声明：本文为「'+"Klutz's Blog"+'」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。' +
+                '\r\n原文链接：' + location.href;
+                clipboardData.setData('text/html', htmlData);
+                clipboardData.setData('text/plain', textData);
+            }
+        }
+    });
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = '复制';
+
+        function copyingDone() {
+            copybutton.innerText = '已复制！';
+            setTimeout(() => {
+                copybutton.innerText = '复制';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                let text = codeblock.textContent +
+                    '\r\n————————————————\r\n' +
+                    '版权声明：本文为「'+"Klutz's Blog"+'」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。' +
+                '\r\n原文链接：' + location.href;
+                navigator.clipboard.writeText(text);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) {}
+            selection.removeRange(range);
+        });
+
+        let language = codeblock.className.replaceAll("language-", "")
+        let macTool = document.createElement("div")
+        let macTool1 = document.createElement("div")
+        let macTool2 = document.createElement("div")
+        let macTool3 = document.createElement("div")
+        let languageType = document.createElement("div")
+        languageType.innerText = language
+        macTool.setAttribute('class', 'mac-tool')
+        macTool1.setAttribute('class', 'mac bb1')
+        macTool2.setAttribute('class', 'mac bb2')
+        macTool3.setAttribute('class', 'mac bb3')
+        languageType.setAttribute('class', 'language-type')
+        macTool.appendChild(macTool1)
+        macTool.appendChild(macTool2)
+        macTool.appendChild(macTool3)
+        macTool.appendChild(languageType)
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+            container.appendChild(macTool)
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+            container.appendChild(macTool)
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+            container.appendChild(macTool)
+        }
+    });
+</script>
+</body>
+
+</html>

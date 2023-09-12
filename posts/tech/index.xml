@@ -6,7 +6,16 @@
     <description>Recent content in 👨🏻‍💻 技术 on Klutz&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <lastBuildDate>Sun, 10 Sep 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://711lll711.github.io/posts/tech/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 12 Sep 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://711lll711.github.io/posts/tech/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>vmware安装ubuntu并配置静态ip</title>
+      <link>https://711lll711.github.io/posts/tech/ubuntusetup/</link>
+      <pubDate>Tue, 12 Sep 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://711lll711.github.io/posts/tech/ubuntusetup/</guid>
+      <description>DHCP自动分配ip虽然方便，但我们还是希望服务器的ip是不变的，所以一起来配静态ip吧！</description>
+    </item>
+    
     <item>
       <title>team_todo项目复盘</title>
       <link>https://711lll711.github.io/posts/tech/team_reflection/</link>
