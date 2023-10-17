@@ -6,7 +6,16 @@
     <description>Recent content in linux on Klutz&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <lastBuildDate>Tue, 12 Sep 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://711lll711.github.io/categories/linux/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 25 Sep 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://711lll711.github.io/categories/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ubuntu22.04如何使用chkconfig命令</title>
+      <link>https://711lll711.github.io/posts/tech/chkconfig/</link>
+      <pubDate>Mon, 25 Sep 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://711lll711.github.io/posts/tech/chkconfig/</guid>
+      <description>好多坑</description>
+    </item>
+    
     <item>
       <title>vmware安装ubuntu并配置静态ip</title>
       <link>https://711lll711.github.io/posts/tech/ubuntusetup/</link>

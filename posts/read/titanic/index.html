@@ -5,11 +5,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>vmware安装ubuntu并配置静态ip | Klutz&#39;s Blog</title>
-<meta name="keywords" content="linux, internet">
-<meta name="description" content="DHCP自动分配ip虽然方便，但我们还是希望服务器的ip是不变的，所以一起来配静态ip吧！">
+<title>泰坦尼克号 | Klutz&#39;s Blog</title>
+<meta name="keywords" content="film">
+<meta name="description" content="叙述与节奏 以老rose回忆的方">
 <meta name="author" content="Klutz">
-<link rel="canonical" href="https://711lll711.github.io/posts/tech/ubuntusetup/">
+<link rel="canonical" href="https://711lll711.github.io/posts/read/titanic/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.css" rel="preload stylesheet" as="style">
 <script defer crossorigin="anonymous" src="/assets/js/highlight.js" onload="hljs.initHighlightingOnLoad();"></script>
 <link rel="icon" href="https://711lll711.github.io/img/avatar.ico">
@@ -56,6 +56,8 @@
 
     </style>
 </noscript>
+<script defer src="https://unpkg.com/mermaid@8.8.1/dist/mermaid.min.js"></script>
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
 <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js"></script>
@@ -71,18 +73,18 @@ var _hmt = _hmt || [];
   s.parentNode.insertBefore(hm, s);
 })();
 </script>
-<meta property="og:title" content="vmware安装ubuntu并配置静态ip" />
-<meta property="og:description" content="DHCP自动分配ip虽然方便，但我们还是希望服务器的ip是不变的，所以一起来配静态ip吧！" />
+<meta property="og:title" content="泰坦尼克号" />
+<meta property="og:description" content="叙述与节奏 以老rose回忆的方" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://711lll711.github.io/posts/tech/ubuntusetup/" />
-<meta property="og:image" content="https://711lll711.github.io/posts/tech/ubuntusetup/ubuntu.jpg" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2023-09-12T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-09-12T00:00:00+00:00" />
+<meta property="og:url" content="https://711lll711.github.io/posts/read/titanic/" />
+<meta property="og:image" content="https://711lll711.github.io/posts/read/titanic/fly.jpg" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-10-17T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-10-17T00:00:00+00:00" />
 
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="https://711lll711.github.io/posts/tech/ubuntusetup/ubuntu.jpg" />
-<meta name="twitter:title" content="vmware安装ubuntu并配置静态ip"/>
-<meta name="twitter:description" content="DHCP自动分配ip虽然方便，但我们还是希望服务器的ip是不变的，所以一起来配静态ip吧！"/>
+<meta name="twitter:image" content="https://711lll711.github.io/posts/read/titanic/fly.jpg" />
+<meta name="twitter:title" content="泰坦尼克号"/>
+<meta name="twitter:description" content="叙述与节奏 以老rose回忆的方"/>
 
 
 <script type="application/ld+json">
@@ -101,14 +103,14 @@ var _hmt = _hmt || [];
         {
           "@type": "ListItem",
           "position":  2 ,
-          "name": "👨🏻‍💻 技术",
-          "item": "https://711lll711.github.io/posts/tech/"
+          "name": "📕 阅读",
+          "item": "https://711lll711.github.io/posts/read/"
         }, 
     {
       "@type": "ListItem",
       "position":  3 ,
-      "name": "vmware安装ubuntu并配置静态ip",
-      "item": "https://711lll711.github.io/posts/tech/ubuntusetup/"
+      "name": "泰坦尼克号",
+      "item": "https://711lll711.github.io/posts/read/titanic/"
     }
   ]
 }
@@ -117,24 +119,24 @@ var _hmt = _hmt || [];
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "vmware安装ubuntu并配置静态ip",
-  "name": "vmware安装ubuntu并配置静态ip",
-  "description": "DHCP自动分配ip虽然方便，但我们还是希望服务器的ip是不变的，所以一起来配静态ip吧！",
+  "headline": "泰坦尼克号",
+  "name": "泰坦尼克号",
+  "description": "叙述与节奏 以老rose回忆的方",
   "keywords": [
-    "linux", "internet"
+    "film"
   ],
-  "articleBody": "下载vmware workstation并安装ubuntu 下载好vm和ubuntu iso文件，一直下一步就好啦~ 装好ubuntu后用apt下两个必要工具，vim用来编辑文件，net-tools用来查看网络状态\nsudo apt install vim sudo apt install net-tools NAT联网，固定静态ip 概念简介 ip: 用来标识网络中的一台主机，ip地址由32位二进制数组成，分为网络号和主机号两部分，网络号用来标识网络，主机号用来标识主机。ip地址分为公网ip和私网ip，公网ip是可以直接访问的，私网ip只能在局域网内访问。ip地址分为ipv4和ipv6。 子网掩码： 用来标识ip地址中网络号和主机号的分界线，子网掩码也是32位二进制数，子网掩码中的网络号部分全为1，主机号部分全为0。子网掩码和ip地址进行与运算，得到的结果就是网络号。子网掩码的作用是用来判断两台主机是否在同一个局域网内，如果两台主机的ip地址与子网掩码进行与运算，得到的结果相同，那么这两台主机就在同一个局域网内，可以直接通信，否则就需要通过路由器进行通信。 网关： 网关是一台主机，它的ip地址是局域网内的一个ip地址，顾名思义就是公网与局域网之间的大门~网关的作用是将局域网内的数据转发到公网上，或者将公网上的数据转发到局域网内。网关的ip地址一般是局域网内的第一个ip地址，也就是网络号不变，主机号为0的ip地址。 DNS： DNS是一种域名解析服务，它的作用是将域名解析成ip地址。 NAT联网 什么是NAT？\n原理参考韩顺平linux\n固定静态ip 在我们没有设置静态ip之前，默认是使用DHCP自动分配ip，也是可以上网的，但是每次重启虚拟机，ip地址都会变化，这样就不方便了。所以我们需要设置静态ip。\n方法1：图形化界面 打开设置，选择网络，齿轮，选择Wired Settings 点击齿轮，选择IPv4，选择Manual，填入ip地址，子网掩码，网关，DNS\n怎么确定这些值？ 在windows主机上打开cmd，输入ipconfig，我们看的是vmnet8的ip地址，子网掩码，网关，DNS 在ubuntu填入值： ip:直接固定为DHCP分配的ip地址 子网掩码：与vmnet8保持一致 网关：vmnet8的ip地址 DNS：8.8.8.8就行 点击Apply，然后重启网络服务。 方法2：命令行 按照方法1同样的数值配置修改相关参数\n修改网络配置文件 //su进入根目录后 vim /etc/netplan/01-network-manager-all.yaml //修改文件内容如下 network: version: 2 renderer: NetworkManager ethernets: ens33: dhcp4: no # 取消自动分配ip addresses: [192.168.1.10/24] # 你的虚拟机的ipv4地址/子网掩码 routes: - to: 0.0.0.0/0 via: 192.168.0.1 # 这里是你的网关地址 metric: 100 nameservers: addresses: [8.8.8.8, 8.8.4.4] #DNS地址 重启网络服务，查看ip sudo netplan apply sudo systemctl restart NetworkManager ifconfig 踩坑记录 su root显示 authentication failure 原因： 这是因为在Ubuntu中，默认情况下，root 用户是被禁用的，不允许直接登录。相反，Ubuntu鼓励使用 sudo 命令以普通用户的身份来执行需要超级用户权限的操作。\n解决方法：\n在普通用户的帐户下使用 sudo 命令来执行需要超级用户权限的操作。 sudo command_to_run_as_root 设置root密码 sudo passwd root 修改yaml后warning 有的教程写的是gateway4:…, 但提示warning: gateway4 has been deprecated, use default routes instead. See the ‘Default routes’ section of the documentation for more details. 所以修改为\nroutes: - to: 0.0.0.0/0* via: 192.168.0.1 # 这里是你的网关地址 metric: 100 解释：\nto: 0.0.0.0/0 表示所有非本地流量都将通过 via 字段指定的网关（你的网关地址）进行路由。metric 字段是一个可选的参数，用于指定路由的优先级，通常可以设置为100或更高。\n",
-  "wordCount" : "1381",
+  "articleBody": "叙述与节奏 以老rose回忆的方式来讲述整个故事 首先是第一视角有代入感 迟暮之年的rose回忆少女时的邂逅、生死抉择，强烈的反差，美人迟暮，斯人已逝，生死茫茫，宏伟的永不沉没的泰坦尼克号已成残骸。 讲述不仅有rose还有船长等听众，从最初的不太相信rose身份到急切地追问后来发生了什么，在恰当的时间段切到现实，把故事分节，调节节奏，吸引兴趣。 两根本不会交错的线 故事的开始介绍了rose和jack上船的理由。rose是贵族少女，乘船到美国远嫁；jack是浪迹天涯的画家，靠赌博赢得了船票。两人身份地位相差悬殊，向两根永不交错的平行线，但泰坦尼克号称为了他们人生的交点。船沉以后，却阴阳两隔，永不能再见。 泰坦尼克号–社会的缩影 泰坦尼克号以舱位论阶层，一如社会的三六九等。 富人住在奢华的房间里，举行奢华的宴会，女人浮于表面的社交，男人夸夸其谈政治经济。财富是通向这个阶层的通行证。但又不全是。胖太太说，要让他们觉得你有钱，他们接纳你。富人阶级极尽奢华、享乐、轻浮、势利。穷人住在逼仄的房间里，却快乐、单纯。 导演詹姆斯卡梅隆隐喻的不仅仅是当时欧洲某些国家的狂妄固执，也隐喻人类现在社会制度的缺陷。 船沉以后– 富人拥有财富和权利，恣意妄为，结果让全社会如同一艘巨轮一样无可避免地向冰山高速驶去。穷人意识到危险惊恐的求生，富人还活在奢华的泡沫中不相信危险的到来。底层百姓在睡梦中走向死亡，而富人仍能找到办法脱身。 主题 文学的母题总是相通的。生与死、人性、自由、社会、爱情在影片中都得到了很好的诠释。\n如何面对死亡 生死抉择，是个很沉重的话题。泰坦尼克号上，所有人都没做好这个准备。 必定赴死时，你怎么做？ 四个乐手即使没有人听他们演奏，即使船将沉没，仍坚持演奏，艺术不能阻止沉没，但可以给人平和和勇气，是渺小的人类在灾难面前不屈的抗争。 可以逃生时，你怎么做？ rose，jack，carl都放弃过上救生艇的机会。\nrose第一次放弃上船的机会，是要返回救被囚禁的jack。在求生和爱情面前，爱情赢了。 rose和jack一起往上爬时，看到水中哭泣的小孩，决定过去救他。在求生和救人面前，救人赢了。 jack和carl目送rose上救生艇时，那是两个男人对她的告别，是爱与责任。\nrose跳下jack愿意和他一起，在求生和爱情面前，爱情还是赢了。 胖太太提出要返回救人上船，求生和道德面前，道德赢了。 面对绝望时，你怎么做？ jack两次点燃了rose的生命之火。 第一次是问rose:do you love him?在rose说不要来找她时，他说你的生命之火会慢慢熄灭。 第二次是他们两个人困在浮板上，jack让rose答应不要放弃。凭着坚强的意志力，rose获救了。 人性复杂 越是在巨大灾难面前越能看到人性。有爱、责任、坚强、勇敢；也有自私、怯懦。 自由 我愿意把rose和jack之间理解成自由的救赎与爱情的结合。 意象 海洋之心 –未完待续惹🤪⛴️🦢\n",
+  "wordCount" : "1208",
   "inLanguage": "zh",
-  "image":"https://711lll711.github.io/posts/tech/ubuntusetup/ubuntu.jpg","datePublished": "2023-09-12T00:00:00Z",
-  "dateModified": "2023-09-12T00:00:00Z",
+  "image":"https://711lll711.github.io/posts/read/titanic/fly.jpg","datePublished": "2023-10-17T00:00:00Z",
+  "dateModified": "2023-10-17T00:00:00Z",
   "author":[{
     "@type": "Person",
     "name": "Klutz"
   }],
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://711lll711.github.io/posts/tech/ubuntusetup/"
+    "@id": "https://711lll711.github.io/posts/read/titanic/"
   },
   "publisher": {
     "@type": "Organization",
@@ -245,13 +247,10 @@ var _hmt = _hmt || [];
 
 <article class="post-single">
   <header class="post-header">
-    <div class="breadcrumbs"><a href="https://711lll711.github.io/">🏠 主页</a>&nbsp;»&nbsp;<a href="https://711lll711.github.io/posts/">📚文章</a>&nbsp;»&nbsp;<a href="https://711lll711.github.io/posts/tech/">👨🏻‍💻 技术</a></div>
+    <div class="breadcrumbs"><a href="https://711lll711.github.io/">🏠 主页</a>&nbsp;»&nbsp;<a href="https://711lll711.github.io/posts/">📚文章</a>&nbsp;»&nbsp;<a href="https://711lll711.github.io/posts/read/">📕 阅读</a></div>
     <h1 class="post-title">
-      vmware安装ubuntu并配置静态ip
+      泰坦尼克号
     </h1>
-    <div class="post-description">
-      DHCP自动分配ip虽然方便，但我们还是希望服务器的ip是不变的，所以一起来配静态ip吧！
-    </div>
     <div class="post-meta">
 
 <style>
@@ -271,7 +270,7 @@ var _hmt = _hmt || [];
 <span class="parent-post-meta">
     <span id="post_meta_style_1">
         <span class="fa fa-calendar-check-o"></span>
-        <span>2023-09-12
+        <span>2023-10-17
             &nbsp;&nbsp;
         </span>
     </span>
@@ -284,7 +283,7 @@ var _hmt = _hmt || [];
     
     <span id="post_meta_style_3">
         <span class="fa fa-file-word-o"></span>
-        <span>1381字
+        <span>1208字
             &nbsp;&nbsp;
         </span>
     </span>
@@ -304,8 +303,7 @@ var _hmt = _hmt || [];
         <span class="fa fa-tags" style="opacity: 0.8"></span>
         <span>
             <span class="post-tags-meta">
-                <a href="https://711lll711.github.io/tags/linux/" style="color: var(--secondary)!important;">linux</a>
-                &nbsp;<a href="https://711lll711.github.io/tags/tech/" style="color: var(--secondary)!important;">tech</a>
+                <a href="https://711lll711.github.io/tags/read/" style="color: var(--secondary)!important;">read</a>
             </span>
         </span>
     </span>
@@ -314,8 +312,8 @@ var _hmt = _hmt || [];
 
 </div>
   </header> 
-<figure class="entry-cover"><img loading="lazy" src="https://711lll711.github.io/posts/tech/ubuntusetup/ubuntu.jpg" alt="ubuntu">
-        <p>ubuntu</p>
+<figure class="entry-cover"><img loading="lazy" src="https://711lll711.github.io/posts/read/titanic/fly.jpg" alt="">
+        
 </figure><aside id="toc-container" class="toc-container wide">
     <div class="toc">
         <details  open>
@@ -325,33 +323,12 @@ var _hmt = _hmt || [];
 
         <div class="inner"><ul>
                 <li>
-                    <a href="#%e4%b8%8b%e8%bd%bdvmware-workstation%e5%b9%b6%e5%ae%89%e8%a3%85ubuntu" aria-label="下载vmware workstation并安装ubuntu">下载vmware workstation并安装ubuntu</a></li>
+                    <a href="#%e5%8f%99%e8%bf%b0%e4%b8%8e%e8%8a%82%e5%a5%8f" aria-label="叙述与节奏">叙述与节奏</a></li>
                 <li>
-                    <a href="#nat%e8%81%94%e7%bd%91%e5%9b%ba%e5%ae%9a%e9%9d%99%e6%80%81ip" aria-label="NAT联网，固定静态ip">NAT联网，固定静态ip</a><ul>
-                        
+                    <a href="#%e4%b8%bb%e9%a2%98" aria-label="主题">主题</a></li>
                 <li>
-                    <a href="#%e6%a6%82%e5%bf%b5%e7%ae%80%e4%bb%8b" aria-label="概念简介">概念简介</a></li>
-                <li>
-                    <a href="#nat%e8%81%94%e7%bd%91" aria-label="NAT联网">NAT联网</a></li>
-                <li>
-                    <a href="#%e5%9b%ba%e5%ae%9a%e9%9d%99%e6%80%81ip" aria-label="固定静态ip">固定静态ip</a><ul>
-                        
-                <li>
-                    <a href="#%e6%96%b9%e6%b3%951%e5%9b%be%e5%bd%a2%e5%8c%96%e7%95%8c%e9%9d%a2" aria-label="方法1：图形化界面">方法1：图形化界面</a></li>
-                <li>
-                    <a href="#%e6%96%b9%e6%b3%952%e5%91%bd%e4%bb%a4%e8%a1%8c" aria-label="方法2：命令行">方法2：命令行</a></li></ul>
-                </li></ul>
+                    <a href="#%e6%84%8f%e8%b1%a1" aria-label="意象">意象</a>
                 </li>
-                <li>
-                    <a href="#%e8%b8%a9%e5%9d%91%e8%ae%b0%e5%bd%95" aria-label="踩坑记录">踩坑记录</a><ul>
-                        
-                <li>
-                    <a href="#su-root%e6%98%be%e7%a4%ba-authentication-failure" aria-label="su root显示 authentication failure">su root显示 authentication failure</a></li>
-                <li>
-                    <a href="#%e4%bf%ae%e6%94%b9yaml%e5%90%8ewarning" aria-label="修改yaml后warning">修改yaml后warning</a>
-                </li>
-            </ul>
-            </li>
             </ul>
         </div>
         </details>
@@ -417,105 +394,50 @@ var _hmt = _hmt || [];
         return rect.top + win.pageYOffset;
     }
 </script>
-  <div class="post-content"><h2 id="下载vmware-workstation并安装ubuntu">下载vmware workstation并安装ubuntu<a hidden class="anchor" aria-hidden="true" href="#下载vmware-workstation并安装ubuntu">#</a></h2>
-<p>下载好vm和ubuntu iso文件，一直下一步就好啦~  <br>
-装好ubuntu后用apt下两个必要工具，vim用来编辑文件，net-tools用来查看网络状态</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo apt install vim
-</span></span><span style="display:flex;"><span>sudo apt install net-tools
-</span></span></code></pre></div><h2 id="nat联网固定静态ip">NAT联网，固定静态ip<a hidden class="anchor" aria-hidden="true" href="#nat联网固定静态ip">#</a></h2>
-<h3 id="概念简介">概念简介<a hidden class="anchor" aria-hidden="true" href="#概念简介">#</a></h3>
+  <div class="post-content"><h2 id="叙述与节奏">叙述与节奏<a hidden class="anchor" aria-hidden="true" href="#叙述与节奏">#</a></h2>
 <ol>
-<li>ip:
-用来<code>标识网络中的一台主机</code>，ip地址由32位二进制数组成，分为网络号和主机号两部分，网络号用来标识网络，主机号用来标识主机。ip地址分为公网ip和私网ip，公网ip是可以直接访问的，私网ip只能在局域网内访问。ip地址分为ipv4和ipv6。</li>
-<li>子网掩码：
-用来标识ip地址中网络号和主机号的分界线，子网掩码也是32位二进制数，子网掩码中的网络号部分全为1，主机号部分全为0。子网掩码和ip地址进行<code>与运算</code>，得到的结果就是网络号。子网掩码的作用是用来判断两台主机是否在同一个局域网内，如果两台主机的ip地址与子网掩码进行与运算，得到的结果相同，那么这两台主机就在<code>同一个局域网</code>内，可以直接通信，否则就需要通过路由器进行通信。</li>
-<li>网关：
-网关是一台主机，它的ip地址是局域网内的一个ip地址，顾名思义就是<code>公网与局域网之间的大门</code>~网关的作用是将局域网内的数据转发到公网上，或者将公网上的数据转发到局域网内。网关的ip地址一般是局域网内的第一个ip地址，也就是网络号不变，主机号为0的ip地址。</li>
-<li>DNS：
-DNS是一种域名解析服务，它的作用是将<code>域名解析成ip地址</code>。</li>
-</ol>
-<h3 id="nat联网">NAT联网<a hidden class="anchor" aria-hidden="true" href="#nat联网">#</a></h3>
-<blockquote>
-<p>什么是NAT？<br>
-原理参考<a href="https://www.bilibili.com/video/BV1Sv411r7vd?p=63&amp;vd_source=0eed6cf5f9626548f201d318112f2680">韩顺平linux</a></p>
-</blockquote>
-<h3 id="固定静态ip">固定静态ip<a hidden class="anchor" aria-hidden="true" href="#固定静态ip">#</a></h3>
-<p>在我们没有设置静态ip之前，默认是使用DHCP自动分配ip，也是可以上网的，但是每次重启虚拟机，ip地址都会变化，这样就不方便了。所以我们需要设置静态ip。</p>
-<h4 id="方法1图形化界面">方法1：图形化界面<a hidden class="anchor" aria-hidden="true" href="#方法1图形化界面">#</a></h4>
-<ol>
-<li>打开设置，选择网络，齿轮，选择Wired Settings  <br>
-<img loading="lazy" src="1.png" alt="进入网络设置"  />
-</li>
-<li>点击齿轮，选择IPv4，选择Manual，填入ip地址，子网掩码，网关，DNS<br>
-<img loading="lazy" src="3.png" alt="手动设置"  />
-</li>
-<li>怎么确定这些值？
+<li>以老rose回忆的方式来讲述整个故事
 <ul>
-<li>在windows主机上打开cmd，输入ipconfig，我们看的是vmnet8的ip地址，子网掩码，网关，DNS</li>
-<li>在ubuntu填入值：
-<ul>
-<li>ip:直接固定为DHCP分配的ip地址</li>
-<li>子网掩码：与vmnet8保持一致</li>
-<li>网关：vmnet8的ip地址</li>
-<li>DNS：8.8.8.8就行 <br>
-<img loading="lazy" src="2.png" alt="ip设置"  />
-</li>
+<li>首先是第一视角有代入感</li>
+<li>迟暮之年的rose回忆少女时的邂逅、生死抉择，强烈的反差，美人迟暮，斯人已逝，生死茫茫，宏伟的永不沉没的泰坦尼克号已成残骸。</li>
+<li>讲述不仅有rose还有船长等听众，从最初的不太相信rose身份到急切地追问后来发生了什么，在恰当的时间段切到现实，把故事分节，调节节奏，吸引兴趣。</li>
 </ul>
 </li>
-</ul>
-</li>
-<li>点击Apply，然后重启网络服务。</li>
+<li>两根本不会交错的线
+故事的开始介绍了rose和jack上船的理由。rose是贵族少女，乘船到美国远嫁；jack是浪迹天涯的画家，靠赌博赢得了船票。两人身份地位相差悬殊，向两根永不交错的平行线，但泰坦尼克号称为了他们人生的交点。船沉以后，却阴阳两隔，永不能再见。</li>
+<li>泰坦尼克号&ndash;社会的缩影
+泰坦尼克号以舱位论阶层，一如社会的三六九等。   <br>
+富人住在奢华的房间里，举行奢华的宴会，女人浮于表面的社交，男人夸夸其谈政治经济。财富是通向这个阶层的通行证。但又不全是。胖太太说，要让他们觉得你有钱，他们接纳你。富人阶级极尽奢华、享乐、轻浮、势利。穷人住在逼仄的房间里，却快乐、单纯。 <br>
+导演詹姆斯卡梅隆隐喻的不仅仅是当时欧洲某些国家的狂妄固执，也隐喻人类现在社会制度的缺陷。    <br>
+船沉以后&ndash;
+富人拥有财富和权利，恣意妄为，结果让全社会如同一艘巨轮一样无可避免地向冰山高速驶去。穷人意识到危险惊恐的求生，富人还活在奢华的泡沫中不相信危险的到来。底层百姓在睡梦中走向死亡，而富人仍能找到办法脱身。</li>
 </ol>
-<h4 id="方法2命令行">方法2：命令行<a hidden class="anchor" aria-hidden="true" href="#方法2命令行">#</a></h4>
-<p>按照方法1同样的数值配置修改相关参数</p>
+<h2 id="主题">主题<a hidden class="anchor" aria-hidden="true" href="#主题">#</a></h2>
+<p>文学的母题总是相通的。生与死、人性、自由、社会、爱情在影片中都得到了很好的诠释。</p>
 <ol>
-<li>修改网络配置文件</li>
+<li>如何面对死亡
+生死抉择，是个很沉重的话题。泰坦尼克号上，所有人都没做好这个准备。 <br>
+<strong>必定赴死时，你怎么做？</strong>     <br>
+四个乐手即使没有人听他们演奏，即使船将沉没，仍坚持演奏，艺术不能阻止沉没，但可以给人平和和勇气，是渺小的人类在灾难面前不屈的抗争。   <br>
+<strong>可以逃生时，你怎么做？</strong>      <br>
+rose，jack，carl都放弃过上救生艇的机会。<br>
+rose第一次放弃上船的机会，是要返回救被囚禁的jack。在求生和爱情面前，爱情赢了。  <br>
+rose和jack一起往上爬时，看到水中哭泣的小孩，决定过去救他。在求生和救人面前，救人赢了。 <br>
+jack和carl目送rose上救生艇时，那是两个男人对她的告别，是爱与责任。<br>
+rose跳下jack愿意和他一起，在求生和爱情面前，爱情还是赢了。
+胖太太提出要返回救人上船，求生和道德面前，道德赢了。 <br>
+<strong>面对绝望时，你怎么做？</strong>        <br>
+jack两次点燃了rose的生命之火。  <br>
+第一次是问rose:do you love him?在rose说不要来找她时，他说你的生命之火会慢慢熄灭。  <br>
+第二次是他们两个人困在浮板上，jack让rose答应不要放弃。凭着坚强的意志力，rose获救了。</li>
+<li>人性复杂     <br>
+越是在巨大灾难面前越能看到人性。有爱、责任、坚强、勇敢；也有自私、怯懦。</li>
+<li>自由   <br>
+我愿意把rose和jack之间理解成自由的救赎与爱情的结合。</li>
 </ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>//su进入根目录后
-</span></span><span style="display:flex;"><span>vim /etc/netplan/01-network-manager-all.yaml
-</span></span><span style="display:flex;"><span>//修改文件内容如下
-</span></span><span style="display:flex;"><span>network:
-</span></span><span style="display:flex;"><span>  version: <span style="color:#ae81ff">2</span>
-</span></span><span style="display:flex;"><span>  renderer: NetworkManager
-</span></span><span style="display:flex;"><span>  ethernets:
-</span></span><span style="display:flex;"><span>    ens33:
-</span></span><span style="display:flex;"><span>      dhcp4: no <span style="color:#75715e"># 取消自动分配ip</span>
-</span></span><span style="display:flex;"><span>      addresses: <span style="color:#f92672">[</span>192.168.1.10/24<span style="color:#f92672">]</span> <span style="color:#75715e"># 你的虚拟机的ipv4地址/子网掩码</span>
-</span></span><span style="display:flex;"><span>      routes:
-</span></span><span style="display:flex;"><span>        - to: 0.0.0.0/0
-</span></span><span style="display:flex;"><span>          via: 192.168.0.1 <span style="color:#75715e"># 这里是你的网关地址</span>
-</span></span><span style="display:flex;"><span>          metric: <span style="color:#ae81ff">100</span>
-</span></span><span style="display:flex;"><span>      nameservers:
-</span></span><span style="display:flex;"><span>        addresses: <span style="color:#f92672">[</span>8.8.8.8, 8.8.4.4<span style="color:#f92672">]</span> <span style="color:#75715e">#DNS地址</span>
-</span></span></code></pre></div><ol start="2">
-<li>重启网络服务，查看ip</li>
-</ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo netplan apply
-</span></span><span style="display:flex;"><span>sudo systemctl restart NetworkManager
-</span></span><span style="display:flex;"><span>ifconfig
-</span></span></code></pre></div><h2 id="踩坑记录">踩坑记录<a hidden class="anchor" aria-hidden="true" href="#踩坑记录">#</a></h2>
-<h3 id="su-root显示-authentication-failure">su root显示 authentication failure<a hidden class="anchor" aria-hidden="true" href="#su-root显示-authentication-failure">#</a></h3>
-<p>原因： 这是因为在Ubuntu中，默认情况下，root 用户是被禁用的，不允许直接登录。相反，Ubuntu鼓励使用 sudo 命令以普通用户的身份来执行需要超级用户权限的操作。</p>
-<p>解决方法：</p>
-<ol>
-<li>在普通用户的帐户下使用 sudo 命令来执行需要超级用户权限的操作。</li>
-</ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo command_to_run_as_root
-</span></span></code></pre></div><ol start="2">
-<li>设置root密码</li>
-</ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo passwd root
-</span></span></code></pre></div><h3 id="修改yaml后warning">修改yaml后warning<a hidden class="anchor" aria-hidden="true" href="#修改yaml后warning">#</a></h3>
-<p>有的教程写的是gateway4:&hellip;,
-但提示warning: <code>gateway4</code> has been deprecated, use default routes instead. <br>
-See the &lsquo;Default routes&rsquo; section of the documentation for more details. <br>
-所以修改为</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>routes:
-</span></span><span style="display:flex;"><span>  - to: 0.0.0.0/0*
-</span></span><span style="display:flex;"><span>    via: 192.168.0.1 <span style="color:#75715e"># 这里是你的网关地址</span>
-</span></span><span style="display:flex;"><span>    metric: <span style="color:#ae81ff">100</span>
-</span></span></code></pre></div><p>解释：<br>
-to: 0.0.0.0/0 表示所有非本地流量都将通过 via 字段指定的网关（你的网关地址）进行路由。metric 字段是一个可选的参数，用于指定路由的优先级，通常可以设置为100或更高。</p>
+<h2 id="意象">意象<a hidden class="anchor" aria-hidden="true" href="#意象">#</a></h2>
+<p>海洋之心     <br>
+&ndash;未完待续惹🤪⛴️🦢</p>
 
 
   </div>
@@ -556,19 +478,13 @@ to: 0.0.0.0/0 表示所有非本地流量都将通过 via 字段指定的网关�
   
   <footer class="post-footer">
     <ul class="post-tags">
-      <li><a href="https://711lll711.github.io/tags/linux/">linux</a></li>
-      <li><a href="https://711lll711.github.io/tags/tech/">tech</a></li>
+      <li><a href="https://711lll711.github.io/tags/read/">read</a></li>
     </ul>
 <nav class="paginav">
-  <a class="prev" href="https://711lll711.github.io/posts/tech/chkconfig/">
-    <span class="title">« 上一页</span>
-    <br>
-    <span>ubuntu22.04如何使用chkconfig命令</span>
-  </a>
-  <a class="next" href="https://711lll711.github.io/posts/tech/team_reflection/">
+  <a class="next" href="https://711lll711.github.io/posts/tech/chkconfig/">
     <span class="title">下一页 »</span>
     <br>
-    <span>team_todo项目复盘</span>
+    <span>ubuntu22.04如何使用chkconfig命令</span>
   </a>
 </nav>
 
