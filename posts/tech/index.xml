@@ -6,7 +6,16 @@
     <description>Recent content in 👨🏻‍💻 技术 on Klutz&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <lastBuildDate>Mon, 25 Sep 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://711lll711.github.io/posts/tech/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 18 Oct 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://711lll711.github.io/posts/tech/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>智慧树解除复制粘贴、自动刷课</title>
+      <link>https://711lll711.github.io/posts/tech/zhihuishu/</link>
+      <pubDate>Wed, 18 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://711lll711.github.io/posts/tech/zhihuishu/</guid>
+      <description>急急急！智慧树刷平时分需要刷问答数，但是禁止了复制粘贴！</description>
+    </item>
+    
     <item>
       <title>ubuntu22.04如何使用chkconfig命令</title>
       <link>https://711lll711.github.io/posts/tech/chkconfig/</link>
